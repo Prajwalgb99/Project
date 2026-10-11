@@ -1,0 +1,33 @@
+use("EmployeeDB")
+use EmployeeDB
+show collections
+db.Employee.insertMany([
+  {empID: 1, name: "Rahul", age: 20, gender: "Male", dept: "HR", salary: 30000, city: "Mysore"},
+  {empID: 2, name: "Amit", age: 24, gender: "Male", dept: "IT", salary: 35000, city: "Bangalore"},
+  {empID: 3, name: "Chandan", age: 40, gender: "Male", dept: "Eco", salary: 25000, city: "Hassan"},
+  {empID: 4, name: "Bharath", age: 52, gender: "Male", dept: "GEO", salary: 50000, city: "Mandya"},
+  {empID: 5, name: "Vandana", age: 21, gender: "Female", dept: "Finanace", salary: 60000, city: "Mysore"},
+  {empID: 6, name: "Priya", age: 32, gender: "Female", dept: "Testing", salary: 20000, city: "Chennai"}
+])
+
+1)db.Employee.find({ age: { $lte: 40 } })
+
+2)db.Employee.find({ salary: { $lt: 50000 } })
+
+3)db.Employee.update(
+  { empID: 5 },
+  { $set: { salary: 65000 } }
+)
+db.Employee.find(
+  { empID: 5 }
+)
+
+4)db.Employee.updateMany(
+  { dept: "HR" },
+  { $set: { dept: "Non Tech" } }
+)
+
+db.Employee.find()
+5)db.Employee.deleteMany(
+  { dept: "HR" }
+)

@@ -171,7 +171,7 @@ db.enrollments.insertMany([
 3)db.students.aggregate([
   {
     $group : {
-      _id :"deptId",
+      _id :"$deptId",
       totalStudents :{ $sum:1}
     }
   },

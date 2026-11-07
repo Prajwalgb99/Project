@@ -1,0 +1,59 @@
+(config terminal i.e, 1st terminal)
+mongod --configsvr --replSet configReplSet --dbpath P:\data\config --port 27019  
+
+(client terminal i.e, 2nd terminal)
+mongosh --port 27019 
+
+rs.initiate({
+  _id: "configReplSet",
+  configsvr: true,
+  members: [
+    { _id: 0, host: "localhost:27019" }
+  ]
+})
+
+rs.status()
+
+exit (type it)
+
+(shard1 terminal i.e, 3rd terminal)
+mongod --shardsvr --replSet shard1ReplSet --dbpath P:\data\shard1 --port 27018  
+
+go to  (client terminal i.e, 2nd terminal) and execute  
+mongosh --port 27018
+
+rs.initiate({
+  _id: "shard1ReplSet",
+  members: [
+    { _id: 0, host: "localhost:27018" }
+  ]
+})
+
+exit 
+
+exit (type it)
+
+(shard2 terminal i.e, 4th terminal)
+mongod --shardsvr --replSet shard1ReplSet --dbpath P:\data\shard2 --port 27020  
+
+go to  (client terminal i.e, 2nd terminal) and execute  
+mongosh --port 27020
+
+rs.initiate({
+  _id: "shard1ReplSet",
+  members: [
+    { _id: 0, host: "localhost:27020" }
+  ]
+})
+
+exit 
+
+next create router terminal (5th terminal) and run  
+mongos --configdb configReplSet/localhost:27019 --port 27021
+
+next go to (client terminal i.e, 2nd terminal) and execute 
+
+mongosh --port 27021
+sh.addShard("shard1ReplSet/localhost:27018")
+sh.addShard("shard2ReplSet/localhost:27020")
+sh.status()
